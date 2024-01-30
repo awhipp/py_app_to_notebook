@@ -1,0 +1,7 @@
+{
+    "python.testing.pytestArgs": [
+        "queue_to_s3_sample"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true
+}
