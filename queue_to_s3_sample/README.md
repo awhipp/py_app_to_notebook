@@ -10,4 +10,4 @@ This is a sample application to test the functionality of the `generate_notebook
 
 ## CI/CD
 
-Github Actions badges to come
+[![Sample App Tests](https://github.com/awhipp/py_app_to_notebook/actions/workflows/sample_app_tests.yml/badge.svg)](https://github.com/awhipp/py_app_to_notebook/actions/workflows/sample_app_tests.yml)

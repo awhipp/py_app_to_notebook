@@ -1,4 +1,4 @@
-name: Sample App Tests
+name: CLI Tests
 
 # Controls when the workflow will run
 on:
@@ -7,7 +7,7 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  sample_app_tests:
+  cli_tests:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
@@ -29,24 +29,11 @@ jobs:
       - name: Cache the virtualenv
         uses: actions/cache@v4
         with:
-          path: ./queue_to_s3_sample/.venv
-          key: ${{ runner.os }}-sample-venv-${{ hashFiles('**/poetry.lock') }}
+          path: .venv
+          key: ${{ runner.os }}-cli-venv-${{ hashFiles('**/poetry.lock') }}
 
       - name: Install dependencies
-        working-directory: ./queue_to_s3_sample
         run: python -m poetry install
 
-      - name: Start LocalStack
-        uses: LocalStack/setup-localstack@main
-        with:
-          image-tag: '3.1'
-          install-awslocal: 'true'
-          configuration: DEBUG=1
-
       - name: Tests
-        working-directory: ./queue_to_s3_sample
-        env:
-          IS_TESTING: 'true'
-          AWS_ACCESS_KEY_ID: 'test'
-          AWS_SECRET_ACCESS_KEY: 'test'
         run: poetry run pytest
