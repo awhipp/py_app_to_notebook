@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "py-app-to-notebook"
+version = "0.1.0"
+description = "This python CLI generates a notebook from a source application so that it can run in Databricks or Jupyter (i.e. most notebook environments)."
+authors = ["awhipp"]
+license = "MIT"
+readme = "README.md"
+packages = []
+
+[tool.poetry.dependencies]
+python = "^3.11"
+click = "^8.1.7"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.4"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
