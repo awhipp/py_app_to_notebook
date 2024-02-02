@@ -1,5 +1,5 @@
 from py_app_to_notebook.utilities.dir import Dependency
-
+import os
 
 class TestDependency():
     """Test the Dependency class."""
@@ -17,6 +17,8 @@ class TestDependency():
 --------app.s3.boto_helpers (queue_to_s3_sample\\aws_helpers\\boto_helpers.py)
 ----app.boto_helpers (queue_to_s3_sample\\aws_helpers\\boto_helpers.py)
 """
+        if os.sep == '/':
+            expected_tree = expected_tree.replace('\\', '/')
 
         # ACT
         tree = self.dependency.dependency_tree_as_string()
