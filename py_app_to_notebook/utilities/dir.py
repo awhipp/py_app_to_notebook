@@ -24,7 +24,7 @@ class Dependency():
     path: str
     module_name: str
     name: str
-    dependencies: set
+    dependencies: list
 
     def __init__(self, root: str, path: str, parent: str = ""):
         """From a file path, create a dependency object."""
@@ -35,7 +35,7 @@ class Dependency():
         else:
             self.module_name = parent + "." + os.path.basename(path).replace('.py', '')
         self.name = os.path.basename(path).replace('.py', '')
-        self.dependencies = set()
+        self.dependencies = []
         
         self.find_dependencies()
 
@@ -43,13 +43,15 @@ class Dependency():
         """String representation of the dependency."""
         return f"{self.module_name} ({self.path})"
     
-    def print_dependency_tree(self, level: int = 1):
-        """Print the dependency tree."""
-        print(self)
+    def dependency_tree_as_string(self, level: int = 1) -> str:
+        """Recursively retrieves the dependency tree as a text string."""
+        tree = f"{self}\n"
         for dependency in self.dependencies:
-            print("----" * level, end="")
-            dependency.print_dependency_tree(level + 1)
+            tree += "----" * level
+            tree += dependency.dependency_tree_as_string(level + 1)
 
+        return tree
+   
     def find_dependencies(self):
         """
         Get the dependency tree of a Python file based on its imports.
@@ -63,7 +65,7 @@ class Dependency():
                 for alias in node.names:
                     module_path = module_name_to_path(alias.name)
                     if self.root in module_path:
-                        self.dependencies.add(
+                        self.dependencies.append(
                             Dependency(
                                 root=self.root,
                                 path=module_path,
@@ -75,15 +77,10 @@ class Dependency():
                 if module_name is not None:
                     module_path = module_name_to_path(module_name)
                     if self.root in module_path:
-                        self.dependencies.add(
+                        self.dependencies.append(
                             Dependency(
                                 root=self.root,
                                 path=module_path,
-                                parent=self.module_name)
+                                parent=self.module_name
+                            )
                         )
-
-        
-if __name__ == '__main__':
-    entry_point = 'queue_to_s3_sample/app.py'
-    dep = Dependency(root='queue_to_s3_sample', path=entry_point)
-    dep.print_dependency_tree()
