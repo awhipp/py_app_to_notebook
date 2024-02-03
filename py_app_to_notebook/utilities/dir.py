@@ -21,14 +21,22 @@ def module_name_to_path(module_name) -> str:
 class Dependency():
     """Represents a modules, its name and path"""
 
+    root: str
     path: str
     module_name: str
     name: str
     dependencies: list
 
-    def __init__(self, root: str, path: str, parent: str = ""):
-        """From a file path, create a dependency object."""
-        self.root = root
+    def __init__(self, path: str,  root: Optional[str] = None, parent: str = ""):
+        """From a file path, create a dependency object."""    
+        if root:
+            self.root = root
+        else:
+            self.root = path.split(os.sep)[0]
+
+        if path is None:
+            raise ValueError("Path is required.")
+
         self.path = path.replace('\\', os.sep).replace('/', os.sep)
         if parent == "":
             self.module_name = os.path.basename(path).replace('.py', '')
@@ -38,6 +46,7 @@ class Dependency():
         self.dependencies = []
         
         self.find_dependencies()
+        super().__init__()
 
     def __str__(self):
         """String representation of the dependency."""
