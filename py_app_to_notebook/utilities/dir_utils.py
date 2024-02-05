@@ -48,3 +48,22 @@ def move_file_to_directory(file_path: str, directory_root: str) -> str:
     new_path = os.path.join(directory_path, file_name)
     shutil.copy(file_path, new_path)
     return new_path
+
+# TODO - Archive temporary directory from dependency 
+# TODO - Replace import beforehand with %run
+def archive_directory(directory: str, archive_path: str, archive_type: str = "zip") -> str:
+    """
+    Archive a directory to an archived file.
+
+    Args:
+    - directory (str): The path to the directory.
+    - archive_path (str): The path to the archive.
+    - archive_type (str): The type of archive to create.
+
+    Returns the path to the archive.
+    """
+    shutil.make_archive(archive_path, archive_type, directory)
+    shutil.move(f"{archive_path}.{archive_type}", archive_path)
+    shutil.rmtree(directory)
+
+    return archive_path
