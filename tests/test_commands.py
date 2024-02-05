@@ -14,6 +14,6 @@ def test_print_dependency_tree(output_dependency_tree):
 def test_build():
     """Ensure the build command works. Tests output as well."""
     runner = CliRunner()
-    result = runner.invoke(build)
+    result = runner.invoke(build, ["--entrypoint", f"queue_to_s3_sample{os.sep}app.py", "--output_name", "queue_to_s3_archive.zip"])
     assert result.exit_code == 0
-    assert "Building Notebook Archive." in result.output
+    assert result.output == f"Building notebook archive (queue_to_s3_archive.zip) for queue_to_s3_sample{os.sep}app.py...\n" # Add newline to match expected output

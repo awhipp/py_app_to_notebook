@@ -1,6 +1,6 @@
 import click
 
-from py_app_to_notebook.utilities.dir import Dependency
+from py_app_to_notebook.utilities.dependency import Dependency
 
 # TODO - Implementation needed
 
@@ -17,6 +17,13 @@ def print_dependency_tree(entrypoint: str):
 
 
 @click.command()
-def build():
+@click.option('--entrypoint', help='The entrypoint for the application.')
+@click.option('--output_name', help='The name of the notebook archive to generate (optional).', default='notebook_archive.zip')
+def build(entrypoint: str, output_name: str):
     """Builds a notebook archive for a given directory."""
-    click.echo("Building Notebook Archive.")
+    # Get entrypoint from options
+    if not entrypoint:
+        click.echo("No entrypoint provided.")
+        return
+    
+    click.echo(f"Building notebook archive ({output_name}) for {entrypoint}...")
