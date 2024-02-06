@@ -2,7 +2,8 @@
 S3 helper functions
 """
 
-from queue_to_s3_sample.aws_helpers.boto_helpers import get_client
+# Relative path should be `%run ../boto_helpers.py`
+from queue_to_s3_sample.utilities.boto_helpers import get_client
 
 def create_bucket_if_not_exists(bucket_name:str, s3_client=None):
     """

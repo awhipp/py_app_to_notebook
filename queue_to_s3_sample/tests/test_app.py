@@ -3,9 +3,9 @@ Test the core application
 """
 from queue_to_s3_sample.app import main
 
-from queue_to_s3_sample.aws_helpers.sqs import push_message_to_queue
+from queue_to_s3_sample.utilities.sqs.sqs_utils import push_message_to_queue
 
-from queue_to_s3_sample.aws_helpers.boto_helpers import get_client
+from queue_to_s3_sample.utilities.boto_helpers import get_client
 
 def test_end_to_end():
     """
