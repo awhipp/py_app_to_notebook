@@ -1,6 +1,6 @@
 """Test the directory utilities."""
 import os
-from py_app_to_notebook.utilities.dir_utils import module_name_to_path, create_temporary_directory, move_file_to_directory
+from py_app_to_notebook.utilities.dir_utils import module_name_to_path, create_temporary_directory, move_file_to_directory, archive_directory
 
 def test_module_name_to_path():
     """Test the module name to path conversion."""
@@ -53,3 +53,33 @@ def test_move_file_to_directory():
 
     # Remove the directory
     os.rmdir(directory_root)
+
+def test_archive_directory():
+    """Test archiving a directory."""
+    # ARRANGE
+    temporary_directory = create_temporary_directory()
+
+    # Recursively copy tests to the temporary directory
+    for root, _, filenames in os.walk("tests"):
+        for filename in filenames:
+            file_path = os.path.join(root, filename)
+            move_file_to_directory(file_path, temporary_directory)
+    
+    archive_path = temporary_directory + os.sep + "test_archive.zip"
+
+    # ACT
+    archive_directory(f"{temporary_directory}{os.sep}tests", archive_path)
+
+    # ASSERT
+    # Archive exists
+    assert os.path.exists(archive_path)
+    # Archive is a file
+    assert not os.path.isdir(archive_path)
+    # Original directory does not exist
+    assert not os.path.exists(temporary_directory + os.sep + "tests")
+
+    # Clean up
+    os.remove(archive_path)
+    os.rmdir(temporary_directory)
+
+
