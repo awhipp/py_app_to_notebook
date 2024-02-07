@@ -1,10 +1,14 @@
 """
 Pulls a message from an SQS queue and pushes it to an S3 bucket
 """
-from queue_to_s3_sample.aws_helpers.sqs import pull_message_from_queue
-from queue_to_s3_sample.aws_helpers.s3 import push_string_to_s3
 
-from queue_to_s3_sample.aws_helpers.boto_helpers import get_client
+# Relative path should be `%run utilities/sqs/sqs_utils.py`
+# Relative path should be `%run utilities/s3/s3_utils.py`
+# Relative path should be `%run utilities/boto_helpers.py`
+from queue_to_s3_sample.utilities.sqs.sqs_utils import pull_message_from_queue
+from queue_to_s3_sample.utilities.s3.s3_utils import push_string_to_s3
+
+from queue_to_s3_sample.utilities.boto_helpers import get_client
 
 def main(s3_client=None, sqs_client=None):
     """

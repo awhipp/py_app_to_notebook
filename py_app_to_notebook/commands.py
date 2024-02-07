@@ -1,6 +1,6 @@
 import click
 
-from py_app_to_notebook.utilities.dependency import Dependency
+from py_app_to_notebook.utilities.dependencies import DependencyTree
 
 # TODO - Implementation needed
 
@@ -12,7 +12,7 @@ def print_dependency_tree(entrypoint: str):
     if not entrypoint:
         click.echo("No entrypoint provided.")
         return
-    tree: str = Dependency(path=entrypoint).dependency_tree_as_string()
+    tree: str = DependencyTree(entrypoint=entrypoint).tree_as_string()
     click.echo(tree)
 
 

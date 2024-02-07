@@ -2,7 +2,8 @@
 SQS helper functions
 """
 
-from queue_to_s3_sample.aws_helpers.boto_helpers import get_client
+# Relative path should be `%run ../boto_helpers.py`
+from queue_to_s3_sample.utilities.boto_helpers import get_client
 
 def create_queue_if_not_exists(queue_name:str, sqs_client=None):
     """

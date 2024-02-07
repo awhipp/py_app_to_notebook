@@ -4,10 +4,10 @@ Configuration file for pytest
 import os
 import pytest
 
-from queue_to_s3_sample.aws_helpers.s3 import create_bucket_if_not_exists, delete_bucket
-from queue_to_s3_sample.aws_helpers.sqs import create_queue_if_not_exists, delete_queue
+from queue_to_s3_sample.utilities.s3.s3_utils import create_bucket_if_not_exists, delete_bucket
+from queue_to_s3_sample.utilities.sqs.sqs_utils import create_queue_if_not_exists, delete_queue
 
-from queue_to_s3_sample.aws_helpers.boto_helpers import get_client
+from queue_to_s3_sample.utilities.boto_helpers import get_client
 
 os.environ.setdefault('IS_TESTING', 'true')
 
