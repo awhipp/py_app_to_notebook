@@ -1,6 +1,6 @@
 """Utility functions for building the notebook from the app."""
 
-from py_app_to_notebook.utilities.dependency import Dependency
+from py_app_to_notebook.utilities.dependencies import DependencyTree
 
 from py_app_to_notebook.utilities.dir_utils import create_temporary_directory, move_file_to_directory
 
@@ -15,38 +15,20 @@ def build_temporary_directory(entrypoint: str) -> str:
     - str: The path to the temporary directory.
     """
     
-    dependency: Dependency = Dependency(path=entrypoint)
+    dependency_tree: DependencyTree = DependencyTree(entrypoint=entrypoint)
 
     # Create a temporary directory
     temporary_directory = create_temporary_directory()
 
     # Get the dependencies list
-    dependencies = dependency.dependency_tree_as_list()
+    dependency_paths = dependency_tree.list_all_module_paths()
 
     # Move the files to the temporary directory
-    for dep in dependencies:
-        move_file_to_directory(dep, temporary_directory)
+    for path in dependency_paths:
+        move_file_to_directory(path, temporary_directory)
 
-    return temporary_directory, len(dependencies)
+    return temporary_directory, len(dependency_paths)
 
-# TODO - Definitely need to define a tree structure and work up it. Longer term goal.
+# TODO Create a function to go from a list of dependencies to a list of minimal dependencies
 def sorted_minimal_dependency_list(entrypoint: str) -> tuple[list[str], dict[str, int]]:
-    """
-    Get the dependencies of the app from least dependent to most dependent.
-
-    Args:
-    - entrypoint (str): The path to the entrypoint of the app.
-
-    Returns:
-    - list: The dependencies from least dependent to most dependent.
-    - dict: The dependency dictionary.
-    """
-    dependency: Dependency = Dependency(path=entrypoint)
-
-    # Get the dependencies list
-    dependency_dictionary: dict[str, int] = dependency.dependency_count_search()
-
-    # Sort the dependencies by the count, and return as an ordered list
-    sorted_dependency_count: str = [k for k, v in sorted(dependency_dictionary.items(), key=lambda item: item[1])]
-
-    return sorted_dependency_count, dependency_dictionary
+    raise NotImplementedError("This function is not yet implemented.")

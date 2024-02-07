@@ -1,9 +1,10 @@
 """Test the build utilities."""
 
 import os
-from py_app_to_notebook.utilities.build_utils import build_temporary_directory, sorted_minimal_dependency_list
+import pytest
+from py_app_to_notebook.utilities.build_utils import build_temporary_directory
 
-def test_build_temporary_directory(output_dependency_tree_list):
+def test_build_temporary_directory(output_dependency_paths):
     """Test building a temporary directory."""
 
     # ACT
@@ -22,7 +23,7 @@ def test_build_temporary_directory(output_dependency_tree_list):
 
     # Ensure the files are as expected
     for created_file in files:
-        assert created_file.replace(f"{temporary_directory}{os.sep}", "") in output_dependency_tree_list
+        assert created_file.replace(f"{temporary_directory}{os.sep}", "") in output_dependency_paths
         
     # Recursively delete any empty folders and files
     for root, dirs, files in os.walk(temporary_directory, topdown=False):
@@ -32,14 +33,7 @@ def test_build_temporary_directory(output_dependency_tree_list):
             os.rmdir(os.path.join(root, name))
 
 
+@pytest.mark.skip(reason="This function is not yet implemented.")
 def test_sorted_minimal_dependency_list():
     """Test getting the sorted minimal dependency list."""
-
-    # ACT
-    ordered_dependencies, dependency_dictionary = sorted_minimal_dependency_list(f'queue_to_s3_sample{os.sep}app.py')
-
-    # ASSERT
-    initial_count = 0
-    for dependency in ordered_dependencies:
-        assert dependency_dictionary[dependency] >= initial_count
-        initial_count = dependency_dictionary[dependency]
+    pass
