@@ -61,6 +61,18 @@ class Dependency():
                     tree.append(sub)
 
         return tree
+    
+    def dependency_count_search(self, dependency_count: dict[str, int] = {}) -> list:
+        """Get the dependency count of the various dependencies.
+        
+        Args:
+        - dependency_count (dict[str, int]): The count of dependencies."""
+        for dependency in self.dependencies:
+            if dependency.path not in dependency_count:
+                dependency_count[dependency.path] = len(dependency.dependency_tree_as_list()) - 1 # remove self
+            dependency_count = dependency.dependency_count_search(dependency_count)
+
+        return dependency_count
    
     def find_dependencies(self):
         """

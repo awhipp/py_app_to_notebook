@@ -1,7 +1,7 @@
 """Test the build utilities."""
 
 import os
-from py_app_to_notebook.utilities.build_utils import build_temporary_directory
+from py_app_to_notebook.utilities.build_utils import build_temporary_directory, sorted_minimal_dependency_list
 
 def test_build_temporary_directory(output_dependency_tree_list):
     """Test building a temporary directory."""
@@ -32,4 +32,14 @@ def test_build_temporary_directory(output_dependency_tree_list):
             os.rmdir(os.path.join(root, name))
 
 
-    
+def test_sorted_minimal_dependency_list():
+    """Test getting the sorted minimal dependency list."""
+
+    # ACT
+    ordered_dependencies, dependency_dictionary = sorted_minimal_dependency_list(f'queue_to_s3_sample{os.sep}app.py')
+
+    # ASSERT
+    initial_count = 0
+    for dependency in ordered_dependencies:
+        assert dependency_dictionary[dependency] >= initial_count
+        initial_count = dependency_dictionary[dependency]

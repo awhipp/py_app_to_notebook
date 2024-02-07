@@ -28,3 +28,25 @@ def build_temporary_directory(entrypoint: str) -> str:
         move_file_to_directory(dep, temporary_directory)
 
     return temporary_directory, len(dependencies)
+
+# TODO - Definitely need to define a tree structure and work up it. Longer term goal.
+def sorted_minimal_dependency_list(entrypoint: str) -> tuple[list[str], dict[str, int]]:
+    """
+    Get the dependencies of the app from least dependent to most dependent.
+
+    Args:
+    - entrypoint (str): The path to the entrypoint of the app.
+
+    Returns:
+    - list: The dependencies from least dependent to most dependent.
+    - dict: The dependency dictionary.
+    """
+    dependency: Dependency = Dependency(path=entrypoint)
+
+    # Get the dependencies list
+    dependency_dictionary: dict[str, int] = dependency.dependency_count_search()
+
+    # Sort the dependencies by the count, and return as an ordered list
+    sorted_dependency_count: str = [k for k, v in sorted(dependency_dictionary.items(), key=lambda item: item[1])]
+
+    return sorted_dependency_count, dependency_dictionary

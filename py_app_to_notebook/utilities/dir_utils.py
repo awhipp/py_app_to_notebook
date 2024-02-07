@@ -50,7 +50,7 @@ def move_file_to_directory(file_path: str, directory_root: str) -> str:
     return new_path
 
 # TODO - Archive temporary directory from dependency 
-# TODO - Replace import beforehand with %run
+# TODO - Create a function to redefine namespace of a module so that it can be imported from a different directory
 def archive_directory(directory: str, archive_path: str, archive_type: str = "zip") -> str:
     """
     Archive a directory to an archived file.
