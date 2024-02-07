@@ -3,6 +3,8 @@
 import os
 from py_app_to_notebook.utilities.build_utils import build_temporary_directory, create_run_file
 
+from py_app_to_notebook.utilities.dir_utils import path_to_module_name
+
 
 def test_build_temporary_directory_and_create_run_file(output_dependency_paths_ordered):
     """Test building a temporary directory and creating a run file."""
@@ -22,6 +24,9 @@ def test_build_temporary_directory_and_create_run_file(output_dependency_paths_o
         for filename in filenames:
             files.append(os.path.join(root, filename))
 
+    # Add import_helper.py to start of list
+    output_dependency_paths_ordered.insert(0, "import_helper.py")
+
     # Ensure the files are as expected
     for created_file in files:
         assert created_file.replace(f"{temporary_directory}{os.sep}", "") in output_dependency_paths_ordered
@@ -30,11 +35,22 @@ def test_build_temporary_directory_and_create_run_file(output_dependency_paths_o
 
     with open(f"{temporary_directory}{os.sep}import_run.py", "r", encoding="utf-8") as run_import_file:
         lines = run_import_file.readlines()
-        for i, line in enumerate(lines):
-            if i % 2 == 0:
-                assert line == "# Command ----------\n"
+        idx = 0
+        for dependency in output_dependency_paths_ordered:
+            if dependency == "import_helper.py":
+                assert lines[idx] == "# Command ----------\n"
+                assert lines[idx + 1] == f"# MAGIC %run .{os.sep}{dependency}\n"
+                idx += 2
+            elif dependency == "import_run.py":
+                continue
             else:
-                assert line == f"# MAGIC %run .{os.sep}{output_dependency_paths_ordered[i // 2]}\n"
+                assert lines[idx] == "# Command ----------\n"
+                assert lines[idx + 1] == "file_uuid = define_checkpoint()\n"
+                assert lines[idx + 2] == "# Command ----------\n"
+                assert lines[idx + 3] == f"# MAGIC %run .{os.sep}{dependency}\n"
+                assert lines[idx + 4] == "# Command ----------\n"
+                assert lines[idx + 5] == f"update_modules_from_checkpoint(file_uuid, '{path_to_module_name(dependency)}')\n"
+                idx += 6
 
         
     # Recursively delete any empty folders and files
