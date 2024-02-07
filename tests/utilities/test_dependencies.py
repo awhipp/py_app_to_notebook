@@ -25,10 +25,10 @@ class TestDependency():
         """Test the dependency module path list."""
 
         # ACT
-        tree = self.dependency_tree.list_all_module_paths()
+        module_paths = self.dependency_tree.list_all_module_paths()
 
         # ASSERT
-        assert tree == output_dependency_paths
+        assert module_paths == output_dependency_paths
 
     def test_build_tree_pointers(self, output_dependency_tree_keys):
         """Test the build tree pointers method."""
@@ -37,3 +37,13 @@ class TestDependency():
         for key, value in self.dependency_tree.nodes.items():
             assert key in output_dependency_tree_keys
             assert isinstance(value, Dependency)
+
+    def test_list_dependencies_in_order(self, output_dependency_paths_ordered):
+        """Test the list dependencies in order method."""
+        ordered_dependencies_asc = self.dependency_tree.list_dependencies_in_order()
+        assert ordered_dependencies_asc == output_dependency_paths_ordered
+
+        ordered_dependencies_desc = self.dependency_tree.list_dependencies_in_order(order="descending")
+        assert ordered_dependencies_desc == list(reversed(output_dependency_paths_ordered))
+
+        

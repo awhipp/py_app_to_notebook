@@ -25,7 +25,16 @@ def output_dependency_paths():
     ]
 
 
+@pytest.fixture
+def output_dependency_paths_ordered():
+    """Output of the dependency paths as a list ordered."""
 
+    return [
+        f'queue_to_s3_sample{os.sep}utilities{os.sep}boto_helpers.py',
+        f'queue_to_s3_sample{os.sep}utilities{os.sep}sqs{os.sep}sqs_utils.py',
+        f'queue_to_s3_sample{os.sep}utilities{os.sep}s3{os.sep}s3_utils.py',
+        f'queue_to_s3_sample{os.sep}app.py',
+    ]
 
 @pytest.fixture
 def output_dependency_tree_keys():

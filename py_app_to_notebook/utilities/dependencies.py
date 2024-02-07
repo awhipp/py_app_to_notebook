@@ -4,7 +4,7 @@
 
 import os
 import ast
-from typing import Optional
+from typing import Optional, Literal
 from py_app_to_notebook.utilities.dir_utils import module_name_to_path, path_to_module_name
 
 
@@ -69,6 +69,24 @@ class Dependency():
                     tree.append(sub)
 
         return tree
+    
+    def find_minimal_dependencies(self, minimal_dependencies: list = []) -> list:
+        """Recursively go to the bottom of the tree, and return dependencies in order from least to most dependent."""
+
+        if self.path in minimal_dependencies:
+            return minimal_dependencies
+        
+        for dependency in self.children:
+            if dependency.path not in minimal_dependencies:
+                new_dependencies = dependency.find_minimal_dependencies(minimal_dependencies)
+                for new_dependency in new_dependencies:
+                    if new_dependency not in minimal_dependencies:
+                        minimal_dependencies.append(new_dependency)
+        
+        if self.path not in minimal_dependencies:
+            minimal_dependencies.append(self.path)
+
+        return minimal_dependencies
 
     def find_dependencies(self):
         """Finds the dependencies of the current module."""
@@ -124,7 +142,6 @@ class DependencyTree():
         for child in node.children:
             self.build_tree_pointers(child)
 
-
     def tree_as_string(self) -> str:
         """Returns the dependency tree as a string."""
         return self.root_dependency.str_rep_node_and_dependencies()
@@ -133,3 +150,12 @@ class DependencyTree():
         """Returns all the module paths in the dependency tree."""
         return self.root_dependency.list_all_module_paths()
         
+    def list_dependencies_in_order(self, order: Literal["descending", "ascending"] = "ascending") -> list:
+        """Returns the dependencies in order based on the order parameter."""
+        
+        dependencies: list = self.root_dependency.find_minimal_dependencies()
+
+        if order == "descending":
+            dependencies = list(reversed(dependencies))
+
+        return dependencies
