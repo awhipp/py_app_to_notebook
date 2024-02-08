@@ -5,14 +5,18 @@ from py_app_to_notebook.utilities.build_utils import build_temporary_directory, 
 
 from py_app_to_notebook.utilities.dir_utils import path_to_module_name
 
+from py_app_to_notebook.utilities.dependencies import DependencyTree
+
 
 def test_build_temporary_directory_and_create_run_file(output_dependency_paths_ordered):
     """Test building a temporary directory and creating a run file."""
+    # ARRANGE
+    dependency_tree: DependencyTree = DependencyTree(entrypoint=f"queue_to_s3_sample{os.sep}app.py")
 
     # ACT
-    temporary_directory, files_created = build_temporary_directory(f'queue_to_s3_sample{os.sep}app.py')
+    temporary_directory, files_created = build_temporary_directory(dependency_tree=dependency_tree)
     
-    run_file = create_run_file(f'queue_to_s3_sample{os.sep}app.py', temporary_directory=temporary_directory)
+    run_file = create_run_file(dependency_tree=dependency_tree, temporary_directory=temporary_directory)
     output_dependency_paths_ordered.append(run_file)
 
     # ASSERT
@@ -51,11 +55,3 @@ def test_build_temporary_directory_and_create_run_file(output_dependency_paths_o
                 assert lines[idx + 4] == "# Command ----------\n"
                 assert lines[idx + 5] == f"update_modules_from_checkpoint(file_uuid, '{path_to_module_name(dependency)}')\n"
                 idx += 6
-
-        
-    # Recursively delete any empty folders and files
-    for root, dirs, files in os.walk(temporary_directory, topdown=False):
-        for name in files:
-            os.remove(os.path.join(root, name))
-        for name in dirs:
-            os.rmdir(os.path.join(root, name))

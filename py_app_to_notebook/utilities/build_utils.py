@@ -8,7 +8,7 @@ from py_app_to_notebook.utilities.dir_utils import create_temporary_directory, m
 
 import py_app_to_notebook.files.import_helper as import_helper
 
-def build_temporary_directory(entrypoint: str) -> str:
+def build_temporary_directory(dependency_tree: DependencyTree) -> str:
     """
     Create a temporary directory to build the notebook.
 
@@ -18,8 +18,6 @@ def build_temporary_directory(entrypoint: str) -> str:
     Returns:
     - str: The path to the temporary directory.
     """
-    
-    dependency_tree: DependencyTree = DependencyTree(entrypoint=entrypoint)
 
     # Create a temporary directory
     temporary_directory = create_temporary_directory()
@@ -41,7 +39,7 @@ def get_run_file_header() -> str:
     """Get the header for the run file."""
     return inspect.getsource(import_helper)
 
-def create_run_file(entrypoint: str, temporary_directory: str = None) -> str:
+def create_run_file(dependency_tree: DependencyTree, temporary_directory: str) -> str:
     """Given minimal dependence order, generate a magic run file to import all modules in order
 
     Args:
@@ -51,13 +49,9 @@ def create_run_file(entrypoint: str, temporary_directory: str = None) -> str:
         str: The path to the run file.
     """
 
-    dependency_tree: DependencyTree = DependencyTree(entrypoint=entrypoint)
-
     # Get the dependencies list
     dependency_paths = dependency_tree.list_dependencies_in_order()
-    
-    if temporary_directory is None:
-        temporary_directory = build_temporary_directory(entrypoint=entrypoint)
+
 
     # Run file takes the following pattern
     # 0. Adds the header from run_file_header.py so allow imports to run and fake modules to be created
