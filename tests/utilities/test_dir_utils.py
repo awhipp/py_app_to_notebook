@@ -1,17 +1,17 @@
 """Test the directory utilities."""
 import os
-from py_app_to_notebook.utilities.dir_utils import module_name_to_path, create_temporary_directory, move_file_to_directory, archive_directory
+from py2databricks.utilities.dir_utils import module_name_to_path, create_temporary_directory, move_file_to_directory, archive_directory
 
 def test_module_name_to_path():
     """Test the module name to path conversion."""
     # ARRANGE
-    module_name = "py_app_to_notebook.utilities.dir_utils"
+    module_name = "py2databricks.utilities.dir_utils"
 
     # ACT
     path = module_name_to_path(module_name)
 
     # ASSERT
-    assert path == "py_app_to_notebook/utilities/dir_utils.py".replace('/', os.sep)
+    assert path == "py2databricks/utilities/dir_utils.py".replace('/', os.sep)
 
 def test_create_temporary_directory():
     """Test the creation of a temporary directory."""

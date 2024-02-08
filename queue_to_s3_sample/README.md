@@ -10,4 +10,4 @@ This is a sample application to test the functionality of the `generate_notebook
 
 ## CI/CD
 
-[![Sample App Tests](https://github.com/awhipp/py_app_to_notebook/actions/workflows/sample_app_tests.yml/badge.svg)](https://github.com/awhipp/py_app_to_notebook/actions/workflows/sample_app_tests.yml)
+[![Sample App Tests](https://github.com/awhipp/python_app_to_databricks/actions/workflows/sample_app_tests.yml/badge.svg)](https://github.com/awhipp/python_app_to_databricks/actions/workflows/sample_app_tests.yml)
