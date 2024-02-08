@@ -34,9 +34,9 @@ def test_build_temporary_directory_and_create_run_file(output_dependency_paths_o
     for created_file in files:
         assert created_file.replace(f"{temporary_directory}{os.sep}", "") in output_dependency_paths_ordered
 
-    assert run_file == "import_application.py"
+    assert run_file == "execute_application.py"
 
-    with open(f"{temporary_directory}{os.sep}import_application.py", "r", encoding="utf-8") as run_import_file:
+    with open(f"{temporary_directory}{os.sep}execute_application.py", "r", encoding="utf-8") as run_import_file:
         lines = run_import_file.readlines()
         idx = 1
         
@@ -47,13 +47,13 @@ def test_build_temporary_directory_and_create_run_file(output_dependency_paths_o
                 assert lines[idx] == "# COMMAND ----------\n"
                 assert lines[idx + 1] == f"# MAGIC %run ./{dependency}\n"
                 idx += 2
-            elif dependency == "import_application":
+            elif dependency == "execute_application":
                 continue
             else:
                 assert lines[idx] == "# COMMAND ----------\n"
                 assert lines[idx + 1] == "file_uuid = define_checkpoint()\n"
                 assert lines[idx + 2] == "# COMMAND ----------\n"
-                assert lines[idx + 3] == f"# MAGIC %run ./{dependency}\n"
+                assert lines[idx + 3] == f"update_modules_from_checkpoint(file_uuid, '{path_to_module_name(dependency)}')\n"
                 assert lines[idx + 4] == "# COMMAND ----------\n"
-                assert lines[idx + 5] == f"update_modules_from_checkpoint(file_uuid, '{path_to_module_name(dependency)}')\n"
+                assert lines[idx + 5] == f"# MAGIC %run ./{dependency}\n"
                 idx += 6

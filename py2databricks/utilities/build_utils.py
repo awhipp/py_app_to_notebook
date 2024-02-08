@@ -57,7 +57,7 @@ def create_run_file(dependency_tree: DependencyTree, temporary_directory: str) -
     # 0. Adds the header from run_file_header.py so allow imports to run and fake modules to be created
     # 1. New Line with `# Command ----------`
     # 2. New line with run command in format `# MAGIC %run module_path`
-    run_import_file_path = f"{temporary_directory}{os.sep}import_application.py"
+    run_import_file_path = f"{temporary_directory}{os.sep}execute_application.py"
     with open(run_import_file_path, "w", encoding="utf-8") as run_import_file:
         run_import_file.write("# Databricks notebook source\n")
         run_import_file.write("# COMMAND ----------\n")
@@ -69,16 +69,6 @@ def create_run_file(dependency_tree: DependencyTree, temporary_directory: str) -
             run_import_file.write("# COMMAND ----------\n")
             run_import_file.write("file_uuid = define_checkpoint()\n")
 
-            # Define magic run command
-            run_import_file.write("# COMMAND ----------\n")
-            
-            # Check if path starts with a dot and os.sep
-            if not path.startswith(f".{os.sep}"):
-                path = f"./{path}"
-
-            run_path = path.replace('.py', '').replace('\\','/')
-            run_import_file.write(f"# MAGIC %run {run_path}\n")
-
             # Update modules from checkpoint
             run_import_file.write("# COMMAND ----------\n")
 
@@ -89,5 +79,15 @@ def create_run_file(dependency_tree: DependencyTree, temporary_directory: str) -
                 module_name = module_name[1:]
         
             run_import_file.write(f"update_modules_from_checkpoint(file_uuid, '{module_name}')\n")
+            
+            # Define magic run command
+            run_import_file.write("# COMMAND ----------\n")
+            
+            # Check if path starts with a dot and os.sep
+            if not path.startswith(f".{os.sep}"):
+                path = f"./{path}"
+
+            run_path = path.replace('.py', '').replace('\\','/')
+            run_import_file.write(f"# MAGIC %run {run_path}\n")
     
     return run_import_file_path.replace(f"{temporary_directory}{os.sep}", "")
