@@ -1,6 +1,7 @@
 """Directory utilities, specifically used to determine the dependencies of a Python app."""
 import os
-from py2databricks.utilities.dependencies import DependencyTree, Dependency
+from py2databricks.models.dependency_tree import DependencyTree
+from py2databricks.models.dependency import Dependency
 
 class TestDependency():
     """Test the Dependency class."""

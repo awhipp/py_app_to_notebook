@@ -4,7 +4,7 @@ import os
 
 from py2databricks.utilities.build_utils import build_temporary_directory, create_run_file
 from py2databricks.utilities.dir_utils import path_to_module_name
-from py2databricks.utilities.dependencies import DependencyTree
+from py2databricks.models.dependency_tree import DependencyTree
 
 
 def test_build_temporary_directory_and_create_run_file(output_dependency_paths_ordered):

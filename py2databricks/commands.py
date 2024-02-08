@@ -1,6 +1,6 @@
 import click
 
-from py2databricks.utilities.dependencies import DependencyTree
+from py2databricks.models.dependency_tree import DependencyTree
 
 from py2databricks.utilities.build_utils import build_temporary_directory, create_run_file
 

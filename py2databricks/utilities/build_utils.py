@@ -2,7 +2,7 @@
 import os
 import inspect
 
-from py2databricks.utilities.dependencies import DependencyTree
+from py2databricks.models.dependency_tree import DependencyTree
 
 from py2databricks.utilities.dir_utils import create_temporary_directory, move_file_to_directory, path_to_module_name
 
