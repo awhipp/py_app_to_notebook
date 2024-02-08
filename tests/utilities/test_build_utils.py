@@ -34,9 +34,9 @@ def test_build_temporary_directory_and_create_run_file(output_dependency_paths_o
     for created_file in files:
         assert created_file.replace(f"{temporary_directory}{os.sep}", "") in output_dependency_paths_ordered
 
-    assert run_file == "import_run.py"
+    assert run_file == "import_application.py"
 
-    with open(f"{temporary_directory}{os.sep}import_run.py", "r", encoding="utf-8") as run_import_file:
+    with open(f"{temporary_directory}{os.sep}import_application.py", "r", encoding="utf-8") as run_import_file:
         lines = run_import_file.readlines()
         idx = 1
         
@@ -47,7 +47,7 @@ def test_build_temporary_directory_and_create_run_file(output_dependency_paths_o
                 assert lines[idx] == "# COMMAND ----------\n"
                 assert lines[idx + 1] == f"# MAGIC %run ./{dependency}\n"
                 idx += 2
-            elif dependency == "import_run":
+            elif dependency == "import_application":
                 continue
             else:
                 assert lines[idx] == "# COMMAND ----------\n"

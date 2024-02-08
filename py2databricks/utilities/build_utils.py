@@ -57,7 +57,7 @@ def create_run_file(dependency_tree: DependencyTree, temporary_directory: str) -
     # 0. Adds the header from run_file_header.py so allow imports to run and fake modules to be created
     # 1. New Line with `# Command ----------`
     # 2. New line with run command in format `# MAGIC %run module_path`
-    run_import_file_path = f"{temporary_directory}{os.sep}import_run.py"
+    run_import_file_path = f"{temporary_directory}{os.sep}import_application.py"
     with open(run_import_file_path, "w", encoding="utf-8") as run_import_file:
         run_import_file.write("# Databricks notebook source\n")
         run_import_file.write("# COMMAND ----------\n")
