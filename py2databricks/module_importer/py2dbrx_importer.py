@@ -44,41 +44,58 @@ def define_checkpoint():
     globals()[f"checkpoint-{file_uuid}"] = dict(globals())
     return file_uuid
 
+def get_all_module_chunks(modules: list) -> str:
+    """Generator which provides all the module chunks from a list of modules.
+
+    i.e. ['test', 'module', 'example'] -> ['test', 'test.module', 'test.module.example']
+    """
+    for idx, _ in enumerate(modules):
+        yield '.'.join(modules[:idx+1])
+
 def update_modules_from_checkpoint(file_uuid: dict, module_name: str):
     """Update the modules from the checkpoint in globals()."""
     import sys
 
     if f"checkpoint-{file_uuid}" not in globals():
-        logger.warning(f"Checkpoint {file_uuid} not found in globals. Likely already imported.")
+        raise KeyError(f"Checkpoint {file_uuid} not found in globals. Likely already imported.")
     
     checkpoint: dict = globals()[f"checkpoint-{file_uuid}"]
     del globals()[f"checkpoint-{file_uuid}"]
 
     # Add module_name to globals and sys.modules if not exists
     split_module_name = module_name.split('.')
-    previous_module = ""
-    for idx, sub_module in enumerate(split_module_name):
-        if sub_module in sys.modules:
-            previous_module = sub_module
-            continue
-        if idx == 0:
-            logger.debug(f"Adding Empty {sub_module} to sys.modules")
-            sys.modules[sub_module] = FakeModule(f"{sub_module}", f"Fake module for {sub_module}")
-        else:
-            logger.debug(f"Adding Empty {previous_module}.{sub_module} to sys.modules")
-            sys.modules[previous_module].__dict__[sub_module] = FakeModule(f"{previous_module}.{sub_module}", f"Fake module for {previous_module}.{sub_module}")
-            sys.modules[f"{previous_module}.{sub_module}"] = FakeModule(f"{previous_module}.{sub_module}", f"Fake module for {previous_module}.{sub_module}")
-        previous_module = sub_module
+    previous_modules = get_all_module_chunks(split_module_name)
+
+    # Add all the modules to sys.modules
+    for module in previous_modules:
+        if module not in sys.modules:
+            logger.debug(f"Adding Empty {module} to sys.modules")
+            sys.modules[module] = FakeModule(module, f"Fake module for {module}")
+
+    # for idx, sub_module in enumerate(split_module_name):
+        # if sub_module in sys.modules:
+        #     previous_modules.append(sub_module)
+        #     continue
+        # if idx == 0:
+        #     logger.debug(f"Adding Empty {sub_module} to sys.modules")
+        #     sys.modules[sub_module] = FakeModule(f"{sub_module}", f"Fake module for {sub_module}")
+        # else:
+        #     logger.debug(f"Adding Empty {previous_module}.{sub_module} to sys.modules")
+        #     sys.modules[previous_module].__dict__[sub_module] = FakeModule(f"{previous_module}.{sub_module}", f"Fake module for {previous_module}.{sub_module}")
+        #     sys.modules[f"{previous_module}.{sub_module}"] = FakeModule(f"{previous_module}.{sub_module}", f"Fake module for {previous_module}.{sub_module}")
+       
+        # previous_modules.append(sub_module)
     
     new_checkpoint = dict(globals())
     for key in new_checkpoint:
         if key not in checkpoint:            
             # Add it to sys.modules
-            logger.debug(f"Adding {module_name} to sys.modules")
+            logger.debug(f"Adding {module_name} and {module_name}.{key} to sys.modules")
+
             sys.modules[module_name].__dict__[key] = new_checkpoint[key]
-            logger.debug(f"Adding {module_name}.{key} to sys.modules")
             sys.modules[f"{module_name}.{key}"] = FakeModule(f"{module_name}.{key}", new_checkpoint[key])
             globals()[f"{module_name}.{key}"] = new_checkpoint[key]
+
             # Remove old from globals
             del globals()[key]
 
