@@ -10,7 +10,7 @@ from py2databricks.models.dependency_tree import DependencyTree
 def test_build_temporary_directory_and_create_run_file(output_dependency_paths_ordered):
     """Test building a temporary directory and creating a run file."""
     # ARRANGE
-    dependency_tree: DependencyTree = DependencyTree(entrypoint=f"queue_to_s3_sample{os.sep}app.py")
+    dependency_tree: DependencyTree = DependencyTree(entrypoint=f"sample_application{os.sep}app.py")
 
     # ACT
     temporary_directory, files_created = build_temporary_directory(dependency_tree=dependency_tree)

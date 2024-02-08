@@ -7,12 +7,12 @@ from py2databricks.models.dependency import Dependency
 class TestDependencyTree():
     """Test the Dependency Tree class."""
 
-    dependency_tree: DependencyTree = DependencyTree(entrypoint=f'queue_to_s3_sample{os.sep}app.py')
+    dependency_tree: DependencyTree = DependencyTree(entrypoint=f'sample_application{os.sep}app.py')
 
     def test_entrypoint_set(self):
         """Test the root is set."""
-        assert self.dependency_tree.entrypoint == f'queue_to_s3_sample{os.sep}app.py'
-        assert self.dependency_tree.root_dependency.root == 'queue_to_s3_sample'
+        assert self.dependency_tree.entrypoint == f'sample_application{os.sep}app.py'
+        assert self.dependency_tree.root_dependency.root == 'sample_application'
 
     def test_dependency_tree_string(self, output_dependency_string):
         """Test the dependency tree string."""
