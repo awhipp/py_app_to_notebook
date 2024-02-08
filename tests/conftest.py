@@ -1,5 +1,6 @@
 import pytest
 import os
+import shutil
 
 from py_app_to_notebook.utilities.dir_utils import create_temporary_directory
 
@@ -61,4 +62,5 @@ def generate_temporary_directory(mocker):
 
     # Cleanup
     if os.path.exists(temporary_directory):
-        os.rmdir(temporary_directory)
+        # Force delete
+        shutil.rmtree(temporary_directory)
