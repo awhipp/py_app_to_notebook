@@ -25,6 +25,6 @@ Generated notebook archive at .{os.sep}queue_to_s3_archive.zip.
     assert os.path.exists(f".{os.sep}queue_to_s3_archive.zip")
 
     # Cleanup
-    os.remove(f".{os.sep}queue_to_s3_archive.zip")
+    # os.remove(f".{os.sep}queue_to_s3_archive.zip")
 
 

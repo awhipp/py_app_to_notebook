@@ -38,19 +38,22 @@ def test_build_temporary_directory_and_create_run_file(output_dependency_paths_o
 
     with open(f"{temporary_directory}{os.sep}import_run.py", "r", encoding="utf-8") as run_import_file:
         lines = run_import_file.readlines()
-        idx = 0
+        idx = 1
+        
+        assert lines[0] == "# Databricks notebook source\n"
         for dependency in output_dependency_paths_ordered:
-            if dependency == "import_helper.py":
-                assert lines[idx] == "# Command ----------\n"
-                assert lines[idx + 1] == f"# MAGIC %run .{os.sep}{dependency}\n"
+            dependency = dependency.replace(".py", "").replace("\\", "/")
+            if dependency == "import_helper":
+                assert lines[idx] == "# COMMAND ----------\n"
+                assert lines[idx + 1] == f"# MAGIC %run ./{dependency}\n"
                 idx += 2
-            elif dependency == "import_run.py":
+            elif dependency == "import_run":
                 continue
             else:
-                assert lines[idx] == "# Command ----------\n"
+                assert lines[idx] == "# COMMAND ----------\n"
                 assert lines[idx + 1] == "file_uuid = define_checkpoint()\n"
-                assert lines[idx + 2] == "# Command ----------\n"
-                assert lines[idx + 3] == f"# MAGIC %run .{os.sep}{dependency}\n"
-                assert lines[idx + 4] == "# Command ----------\n"
+                assert lines[idx + 2] == "# COMMAND ----------\n"
+                assert lines[idx + 3] == f"# MAGIC %run ./{dependency}\n"
+                assert lines[idx + 4] == "# COMMAND ----------\n"
                 assert lines[idx + 5] == f"update_modules_from_checkpoint(file_uuid, '{path_to_module_name(dependency)}')\n"
                 idx += 6
