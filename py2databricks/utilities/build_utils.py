@@ -6,7 +6,7 @@ from py2databricks.utilities.dependencies import DependencyTree
 
 from py2databricks.utilities.dir_utils import create_temporary_directory, move_file_to_directory, path_to_module_name
 
-import py2databricks.files.import_helper as import_helper
+import py2databricks.module_importer.py2dbrx_importer as py2dbrx_importer
 
 def build_temporary_directory(dependency_tree: DependencyTree) -> str:
     """
@@ -29,15 +29,15 @@ def build_temporary_directory(dependency_tree: DependencyTree) -> str:
     for path in dependency_paths:
         move_file_to_directory(path, temporary_directory)
 
-    # Add import_helper.py to the temporary directory
-    with open(f"{temporary_directory}{os.sep}import_helper.py", "w", encoding="utf-8") as import_helper_file:
-        import_helper_file.write(get_run_file_header())
+    # Add py2dbrx_importer.py to the temporary directory
+    with open(f"{temporary_directory}{os.sep}py2dbrx_importer.py", "w", encoding="utf-8") as py2dbrx_importer:
+        py2dbrx_importer.write(get_importer_code())
 
     return temporary_directory, len(dependency_paths)
 
-def get_run_file_header() -> str:
-    """Get the header for the run file."""
-    return inspect.getsource(import_helper)
+def get_importer_code() -> str:
+    """Get the header for the importer code."""
+    return inspect.getsource(py2dbrx_importer)
 
 def create_run_file(dependency_tree: DependencyTree, temporary_directory: str) -> str:
     """Given minimal dependence order, generate a magic run file to import all modules in order
@@ -61,7 +61,7 @@ def create_run_file(dependency_tree: DependencyTree, temporary_directory: str) -
     with open(run_import_file_path, "w", encoding="utf-8") as run_import_file:
         run_import_file.write("# Databricks notebook source\n")
         run_import_file.write("# COMMAND ----------\n")
-        run_import_file.write("# MAGIC %run ./import_helper\n")
+        run_import_file.write("# MAGIC %run ./py2dbrx_importer\n")
 
         for path in dependency_paths:
 

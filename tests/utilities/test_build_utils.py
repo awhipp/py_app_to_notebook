@@ -27,8 +27,8 @@ def test_build_temporary_directory_and_create_run_file(output_dependency_paths_o
         for filename in filenames:
             files.append(os.path.join(root, filename))
 
-    # Add import_helper.py to start of list
-    output_dependency_paths_ordered.insert(0, "import_helper.py")
+    # Add py2dbrx_importer.py to start of list
+    output_dependency_paths_ordered.insert(0, "py2dbrx_importer.py")
 
     # Ensure the files are as expected
     for created_file in files:
@@ -43,7 +43,7 @@ def test_build_temporary_directory_and_create_run_file(output_dependency_paths_o
         assert lines[0] == "# Databricks notebook source\n"
         for dependency in output_dependency_paths_ordered:
             dependency = dependency.replace(".py", "").replace("\\", "/")
-            if dependency == "import_helper":
+            if dependency == "py2dbrx_importer":
                 assert lines[idx] == "# COMMAND ----------\n"
                 assert lines[idx + 1] == f"# MAGIC %run ./{dependency}\n"
                 idx += 2
