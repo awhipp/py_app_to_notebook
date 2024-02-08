@@ -14,6 +14,17 @@ def test_print_dependency_tree(output_dependency_string):
 def test_build():
     """Ensure the build command works. Tests output as well."""
     runner = CliRunner()
-    result = runner.invoke(build, ["--entrypoint", f"queue_to_s3_sample{os.sep}app.py", "--output_name", "queue_to_s3_archive.zip"])
+    # Check if relative path exists
+    assert os.path.exists(f".{os.sep}queue_to_s3_sample{os.sep}app.py")
+
+    result = runner.invoke(build, ["--entrypoint", f".{os.sep}queue_to_s3_sample{os.sep}app.py", "--output_name", f".{os.sep}queue_to_s3_archive.zip"])
     assert result.exit_code == 0
-    assert result.output == f"Building notebook archive (queue_to_s3_archive.zip) for queue_to_s3_sample{os.sep}app.py...\n" # Add newline to match expected output
+    assert result.output == f"""Building notebook archive (.{os.sep}queue_to_s3_archive.zip) for .{os.sep}queue_to_s3_sample/app.py...
+Generated notebook archive at .{os.sep}queue_to_s3_archive.zip.
+"""
+    assert os.path.exists(f".{os.sep}queue_to_s3_archive.zip")
+
+    # Cleanup
+    os.remove(f".{os.sep}queue_to_s3_archive.zip")
+
+

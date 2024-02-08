@@ -1,8 +1,12 @@
+import os
+
 import click
 
 from py_app_to_notebook.utilities.dependencies import DependencyTree
 
-# TODO - Implementation needed
+from py_app_to_notebook.utilities.build_utils import build_temporary_directory, create_run_file
+
+from py_app_to_notebook.utilities.dir_utils import archive_directory
 
 @click.command()
 @click.option('--entrypoint', help='The entrypoint for the application.')
@@ -27,3 +31,8 @@ def build(entrypoint: str, output_name: str):
         return
     
     click.echo(f"Building notebook archive ({output_name}) for {entrypoint}...")
+    dependency_tree: DependencyTree = DependencyTree(entrypoint=entrypoint)
+    temporary_directory, _= build_temporary_directory(dependency_tree=dependency_tree)
+    _ = create_run_file(dependency_tree=dependency_tree, temporary_directory=temporary_directory)
+    archive_directory(temporary_directory, output_name)
+    click.echo(f"Generated notebook archive at {output_name}.")

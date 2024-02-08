@@ -78,8 +78,3 @@ def test_archive_directory():
     # Original directory does not exist
     assert not os.path.exists(temporary_directory + os.sep + "tests")
 
-    # Clean up
-    os.remove(archive_path)
-    os.rmdir(temporary_directory)
-
-

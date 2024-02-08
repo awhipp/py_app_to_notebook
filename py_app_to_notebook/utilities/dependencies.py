@@ -36,6 +36,9 @@ class Dependency():
 
         self.path = path.replace('\\', os.sep).replace('/', os.sep)
 
+        if os.path.exists(self.path) is False:
+            raise FileNotFoundError(f"File not found: {self.path}")
+
         self.parent = parent
 
         # Define module name based on self.path
@@ -98,25 +101,29 @@ class Dependency():
                 for alias in node.names:
                     module_path = module_name_to_path(alias.name)
                     if self.root in module_path:
-                        self.children.append(
-                            Dependency(
-                                root=self.root,
-                                path=module_path,
-                                parent=self
+                        try:
+                            child = Dependency(
+                                    root=self.root,
+                                    path=module_path,
+                                    parent=self
                             )
-                        )
+                            self.children.append(child)
+                        except FileNotFoundError:
+                            pass
             elif isinstance(node, ast.ImportFrom):
                 module_name = node.module
                 if module_name is not None:
                     module_path = module_name_to_path(module_name)
                     if self.root in module_path:
-                        self.children.append(
-                            Dependency(
-                                root=self.root,
-                                path=module_path,
-                                parent=self
+                        try:
+                            child = Dependency(
+                                    root=self.root,
+                                    path=module_path,
+                                    parent=self
                             )
-                        )
+                            self.children.append(child)
+                        except FileNotFoundError:
+                            pass
 
 class DependencyTree():
     """Represents a dependency tree.
@@ -154,6 +161,12 @@ class DependencyTree():
         """Returns the dependencies in order based on the order parameter."""
         
         dependencies: list = self.root_dependency.find_minimal_dependencies()
+
+        ## These are two test issues TODO fix
+        # No dependencies should start with a .{os.sep}
+        dependencies = [dep.replace(f".{os.sep}", "") for dep in dependencies]
+        # Ensure unique without messing with order
+        dependencies = list(dict.fromkeys(dependencies))
 
         if order == "descending":
             dependencies = list(reversed(dependencies))
