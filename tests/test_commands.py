@@ -19,7 +19,7 @@ def test_build():
 
     result = runner.invoke(build, ["--entrypoint", f".{os.sep}queue_to_s3_sample{os.sep}app.py", "--output_name", f".{os.sep}queue_to_s3_archive.zip"])
     assert result.exit_code == 0
-    assert result.output == f"""Building notebook archive (.{os.sep}queue_to_s3_archive.zip) for .{os.sep}queue_to_s3_sample/app.py...
+    assert result.output == f"""Building notebook archive (.{os.sep}queue_to_s3_archive.zip) for .{os.sep}queue_to_s3_sample{os.sep}app.py...
 Generated notebook archive at .{os.sep}queue_to_s3_archive.zip.
 """
     assert os.path.exists(f".{os.sep}queue_to_s3_archive.zip")
