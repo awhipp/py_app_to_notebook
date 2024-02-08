@@ -8,12 +8,10 @@ from py2databricks.utilities.dir_utils import create_temporary_directory
 def output_dependency_string():
     """Output of the dependency tree."""
     
-    return """queue_to_s3_sample.app
-----queue_to_s3_sample.utilities.sqs.sqs_utils
---------queue_to_s3_sample.utilities.boto_helpers
-----queue_to_s3_sample.utilities.s3.s3_utils
---------queue_to_s3_sample.utilities.boto_helpers
-----queue_to_s3_sample.utilities.boto_helpers
+    return """sample_application.app
+----sample_application.utilities.driver
+--------sample_application.utilities.environment.variables
+------------sample_application.utilities.generators.randoms
 """
 
 @pytest.fixture
@@ -21,10 +19,10 @@ def output_dependency_paths():
     """Output of the dependency paths as a list."""
 
     return [
-        f'queue_to_s3_sample{os.sep}app.py',
-        f'queue_to_s3_sample{os.sep}utilities{os.sep}sqs{os.sep}sqs_utils.py',
-        f'queue_to_s3_sample{os.sep}utilities{os.sep}boto_helpers.py',
-        f'queue_to_s3_sample{os.sep}utilities{os.sep}s3{os.sep}s3_utils.py'
+        f'sample_application{os.sep}app.py',
+        f'sample_application{os.sep}utilities{os.sep}driver.py',
+        f'sample_application{os.sep}utilities{os.sep}environment{os.sep}variables.py',
+        f'sample_application{os.sep}utilities{os.sep}generators{os.sep}randoms.py',
     ]
 
 
@@ -33,10 +31,10 @@ def output_dependency_paths_ordered():
     """Output of the dependency paths as a list ordered."""
 
     return [
-        f'queue_to_s3_sample{os.sep}utilities{os.sep}boto_helpers.py',
-        f'queue_to_s3_sample{os.sep}utilities{os.sep}sqs{os.sep}sqs_utils.py',
-        f'queue_to_s3_sample{os.sep}utilities{os.sep}s3{os.sep}s3_utils.py',
-        f'queue_to_s3_sample{os.sep}app.py',
+        f'sample_application{os.sep}utilities{os.sep}generators{os.sep}randoms.py',
+        f'sample_application{os.sep}utilities{os.sep}environment{os.sep}variables.py',
+        f'sample_application{os.sep}utilities{os.sep}driver.py',
+        f'sample_application{os.sep}app.py',
     ]
 
 @pytest.fixture
@@ -44,10 +42,10 @@ def output_dependency_tree_keys():
     """Output of the dependency tree as keys."""
 
     return [
-        'queue_to_s3_sample.app', 
-        'queue_to_s3_sample.utilities.sqs.sqs_utils', 
-        'queue_to_s3_sample.utilities.boto_helpers', 
-        'queue_to_s3_sample.utilities.s3.s3_utils'
+        'sample_application.app', 
+        'sample_application.utilities.driver', 
+        'sample_application.utilities.environment.variables', 
+        'sample_application.utilities.generators.randoms'
     ]
 
 
