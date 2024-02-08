@@ -6,8 +6,6 @@ This python CLI generates a Databricks archive from a source application so that
 
 * [![CLI Tests](https://github.com/awhipp/python_app_to_databricks/actions/workflows/cli_tests.yml/badge.svg)](https://github.com/awhipp/python_app_to_databricks/actions/workflows/cli_tests.yml) - The CLI is tested to ensure it works as expected.
 
-* [![Sample App Tests](https://github.com/awhipp/python_app_to_databricks/actions/workflows/sample_app_tests.yml/badge.svg)](https://github.com/awhipp/python_app_to_databricks/actions/workflows/sample_app_tests.yml) - The sample application that is used to test the CLI, and is packaged and archived in a way to be deployed to Databricks or Jupyter (i.e. any notebook environment).
-
 ## Installation
 
 Install dependencies with poetry:
