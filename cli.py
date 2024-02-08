@@ -1,5 +1,5 @@
 import click
-from py_app_to_notebook.commands import print_dependency_tree, build
+from py2databricks.commands import print_dependency_tree, build
 
 @click.group()
 def cli():

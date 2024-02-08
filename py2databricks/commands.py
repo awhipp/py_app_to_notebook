@@ -1,12 +1,10 @@
-import os
-
 import click
 
-from py_app_to_notebook.utilities.dependencies import DependencyTree
+from py2databricks.utilities.dependencies import DependencyTree
 
-from py_app_to_notebook.utilities.build_utils import build_temporary_directory, create_run_file
+from py2databricks.utilities.build_utils import build_temporary_directory, create_run_file
 
-from py_app_to_notebook.utilities.dir_utils import archive_directory
+from py2databricks.utilities.dir_utils import archive_directory
 
 @click.command()
 @click.option('--entrypoint', help='The entrypoint for the application.')

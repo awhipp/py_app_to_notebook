@@ -1,7 +1,7 @@
 # tests/test_commands.py
 import os
 from click.testing import CliRunner
-from py_app_to_notebook.commands import print_dependency_tree, build
+from py2databricks.commands import print_dependency_tree, build
 
 def test_print_dependency_tree(output_dependency_string):
     """Ensure the print_dependency_tree command works. Tests output as well."""

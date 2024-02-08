@@ -2,7 +2,7 @@ import pytest
 import os
 import shutil
 
-from py_app_to_notebook.utilities.dir_utils import create_temporary_directory
+from py2databricks.utilities.dir_utils import create_temporary_directory
 
 @pytest.fixture
 def output_dependency_string():
