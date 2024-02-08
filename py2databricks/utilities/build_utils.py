@@ -59,26 +59,28 @@ def create_run_file(dependency_tree: DependencyTree, temporary_directory: str) -
     # 2. New line with run command in format `# MAGIC %run module_path`
     run_import_file_path = f"{temporary_directory}{os.sep}import_run.py"
     with open(run_import_file_path, "w", encoding="utf-8") as run_import_file:
-        run_import_file.write("# Command ----------\n")
-        run_import_file.write(f"# MAGIC %run .{os.sep}import_helper.py\n")
+        run_import_file.write("# Databricks notebook source\n")
+        run_import_file.write("# COMMAND ----------\n")
+        run_import_file.write("# MAGIC %run ./import_helper\n")
 
         for path in dependency_paths:
 
             # Define file checkpoint
-            run_import_file.write("# Command ----------\n")
+            run_import_file.write("# COMMAND ----------\n")
             run_import_file.write("file_uuid = define_checkpoint()\n")
 
             # Define magic run command
-            run_import_file.write("# Command ----------\n")
+            run_import_file.write("# COMMAND ----------\n")
             
             # Check if path starts with a dot and os.sep
             if not path.startswith(f".{os.sep}"):
-                path = f".{os.sep}" + path
+                path = f"./{path}"
 
-            run_import_file.write(f"# MAGIC %run {path}\n")
+            run_path = path.replace('.py', '').replace('\\','/')
+            run_import_file.write(f"# MAGIC %run {run_path}\n")
 
             # Update modules from checkpoint
-            run_import_file.write("# Command ----------\n")
+            run_import_file.write("# COMMAND ----------\n")
 
             # Get module name from path
             module_name = path_to_module_name(path=path)

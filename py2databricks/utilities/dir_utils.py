@@ -27,7 +27,7 @@ def path_to_module_name(path: str) -> str:
     Returns:
     - str: The name of the module.
     """
-    return path.replace(os.sep, '.').replace('.py', '')
+    return path.replace(os.sep, '/').replace('/', '.').replace('.py', '')
 
 def create_temporary_directory() -> str:
     """
